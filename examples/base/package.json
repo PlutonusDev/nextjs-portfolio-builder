@@ -1,7 +1,9 @@
 {
   "name": "example-base",
+  "description": "The base template for nextjs-portfolio-builder.",
   "version": "0.1.0",
   "license": "MIT",
+  "author": "Joshua Hughes",
   "private": true,
   "scripts": {
     "dev": "next dev",

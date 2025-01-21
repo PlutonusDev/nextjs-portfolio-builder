@@ -69,10 +69,11 @@ const packageJson = (packageName) => ({
   },
   devDependencies: {
     '@testing-library/jest-dom': '^6.6.3',
-    '@testing-library/react': '^16.2.0',
+    '@testing-library/react': '^14.0.0',
     '@types/jest': '^29.5.14',
     '@types/react': '^19.0.7',
     '@types/react-dom': '^19.0.3',
+    '@types/testing-library__jest-dom': '^5.14.5',
     '@typescript-eslint/eslint-plugin': '^8.21.0',
     '@typescript-eslint/parser': '^8.21.0',
     eslint: '^9.18.0',

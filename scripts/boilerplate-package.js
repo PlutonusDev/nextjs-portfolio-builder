@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const { promisify } = require('util');
-const https = require('https');
 const readline = require('readline');
+const { downloadTemplate, fetchGitignore, fetchLicense } = require("./git-utils");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -11,39 +11,6 @@ const rl = readline.createInterface({
 });
 
 const question = promisify(rl.question).bind(rl);
-
-async function fetchGitignore(path) {
-  const url = `https://raw.githubusercontent.com/github/gitignore/main/${path}`;
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => resolve(data));
-      })
-      .on('error', reject);
-  });
-}
-
-async function fetchLicense(licenseName) {
-  const url = `https://api.github.com/licenses/${licenseName}`;
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, { headers: { 'User-Agent': 'Node.js' } }, (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
-          try {
-            const licenseData = JSON.parse(data);
-            resolve(licenseData.body);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      })
-      .on('error', reject);
-  });
-}
 
 const packageJson = (packageName) => ({
   name: `@portfolio/${packageName}`,
@@ -162,39 +129,55 @@ describe('Button', () => {
 async function createPackage() {
   try {
     const packageName = await question('Enter the package name (without "@portfolio/"): ');
-
-    console.log('\nSetting up project...');
-
     const packageDir = path.join(__dirname, '..', 'packages', packageName);
 
     if (fs.existsSync(packageDir)) throw new Error(`Package ${packageName} already exists.`);
 
-    const dirs = [
-      packageDir,
-      path.join(packageDir, 'src'),
-      path.join(packageDir, 'src/components'),
-      path.join(packageDir, 'src/components/__tests__'),
-    ];
+    const templateName = await question('If you would like to use a template, enter it\'s name: ');
 
-    dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+    console.log('\nSetting up project...');
 
-    const gitignore = await fetchGitignore('Node.gitignore');
-    const license = await fetchLicense('mit');
+    let templateExists = false;
+    if (templateName) {
+      console.log(`Downloading "${templateName}" template...`);
+      templateExists = await downloadTemplate('example', templateName, packageDir);
 
-    const files = [
-      ['package.json', JSON.stringify(packageJson(packageName), null, 2)],
-      ['tsconfig.json', JSON.stringify(tsConfig, null, 2)],
-      ['.eslintrc.js', eslintRc],
-      ['.gitignore', gitignore],
-      ['LICENSE.md', license],
-      ['src/index.ts', indexFile],
-      ['src/components/Button.tsx', exampleComponent],
-      ['src/components/__tests__/Button.test.tsx', exampleTest],
-    ];
+      if (!templateExists) {
+        const cont = await question('Template not found. Create a default package? (y/n): ');
+        if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
+      }
+    }
 
-    files.forEach(([filename, content]) => {
-      fs.writeFileSync(path.join(packageDir, filename), content);
-    });
+    if (!templateExists) {
+      const dirs = [
+        packageDir,
+        path.join(packageDir, 'src'),
+        path.join(packageDir, 'src/components'),
+        path.join(packageDir, 'src/components/__tests__'),
+      ];
+
+      dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+
+      const gitignore = await fetchGitignore('Node.gitignore');
+      const license = await fetchLicense('mit');
+
+      const files = [
+        ['package.json', JSON.stringify(packageJson(packageName), null, 2)],
+        ['tsconfig.json', JSON.stringify(tsConfig, null, 2)],
+        ['.eslintrc.js', eslintRc],
+        ['.gitignore', gitignore],
+        ['LICENSE.md', license],
+        ['src/index.ts', indexFile],
+        ['src/components/Button.tsx', exampleComponent],
+        ['src/components/__tests__/Button.test.tsx', exampleTest],
+      ];
+
+      files.forEach(([filename, content]) => {
+        fs.writeFileSync(path.join(packageDir, filename), content);
+      });
+    } else {
+      console.log('Template downloaded successfully!');
+    }
 
     console.log('Installing dependencies...');
     execSync('yarn');

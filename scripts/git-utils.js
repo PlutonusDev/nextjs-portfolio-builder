@@ -110,4 +110,4 @@ async function fetchLicense(licenseName) {
     });
 }
 
-module.exports = { downloadTemplate, fetchGitignore, fetchLicense };
+module.exports = { fetchGitHubDirectory, downloadTemplate, fetchFileContent, fetchGitignore, fetchLicense };

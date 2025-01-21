@@ -1,11 +1,19 @@
 {
   "name": "plutonus-portfolio-examples",
-  "private": true,
   "version": "1.0.0",
-  "workspaces": [
-    "examples/*",
-    "packages/*"
-  ],
+  "private": true,
+  "description": "A powerful and flexible monorepo template designed to streamline the creation and management of your web design portfolio.",
+  "repository": {
+    "url": "https://github.com/PlutonusDev/nextjs-portfolio-builder",
+    "type": "github"
+  },
+  "author": "",
+  "devDependencies": {
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.1",
+    "prettier": "^3.4.2",
+    "yarn": "berry"
+  },
   "scripts": {
     "dev": "yarn build:packages && node ./scripts/run-example dev",
     "start": "node ./scripts/run-example start",
@@ -19,10 +27,8 @@
     "create:example": "node ./scripts/boilerplate-example",
     "create:package": "node ./scripts/boilerplate-package"
   },
-  "devDependencies": {
-    "fs-extra": "^11.3.0",
-    "glob": "^11.0.1",
-    "prettier": "^3.4.2",
-    "yarn": "berry"
-  }
+  "workspaces": [
+    "examples/*",
+    "packages/*"
+  ]
 }

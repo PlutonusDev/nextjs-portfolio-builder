@@ -20,11 +20,12 @@ This project provides a well-organized structure for showcasing multiple web des
 
 ## Requirements
 
-- **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
-
-  ```bash
-  npm install -g yarn@berry
-  ```
+> [!IMPORTANT]
+> **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
+>
+> ```bash
+> npm install -g yarn@berry
+> ```
 
 ## Setup
 

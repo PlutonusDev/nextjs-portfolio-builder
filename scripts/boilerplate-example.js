@@ -4,6 +4,7 @@ const { execSync } = require('child_process');
 const { promisify } = require('util');
 const https = require('https');
 const readline = require('readline');
+const { downloadTemplate, fetchGitignore, fetchLicense } = require("./git-utils");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -11,39 +12,6 @@ const rl = readline.createInterface({
 });
 
 const question = promisify(rl.question).bind(rl);
-
-async function fetchGitignore(path) {
-  const url = `https://raw.githubusercontent.com/github/gitignore/main/${path}`;
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => resolve(data));
-      })
-      .on('error', reject);
-  });
-}
-
-async function fetchLicense(licenseName) {
-  const url = `https://api.github.com/licenses/${licenseName}`;
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, { headers: { 'User-Agent': 'Node.js' } }, (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
-          try {
-            const licenseData = JSON.parse(data);
-            resolve(licenseData.body);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      })
-      .on('error', reject);
-  });
-}
 
 function getWorkspacePackages() {
   const packagesDir = path.join(__dirname, '..', 'packages');
@@ -217,49 +185,59 @@ async function createExample() {
       process.exit(1);
     }
 
-    const workspacePackages = getWorkspacePackages();
+    console.log('Checking for template...');
+    const templateExists = await downloadTemplate('example', exampleName, exampleDir);
 
-    const dirs = [
-      exampleDir,
-      path.join(exampleDir, 'pages'),
-      path.join(exampleDir, 'styles'),
-      path.join(exampleDir, 'components'),
-      path.join(exampleDir, '.husky'),
-    ];
+    if (!templateExists) {
+      const cont = await question('Template not found. Create a default example? (y/n): ');
+      if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
 
-    dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+      const dirs = [
+        exampleDir,
+        path.join(exampleDir, 'pages'),
+        path.join(exampleDir, 'styles'),
+        path.join(exampleDir, 'components'),
+        path.join(exampleDir, '.husky'),
+      ];
 
-    const gitignore = await fetchGitignore('Node.gitignore');
-    const license = await fetchLicense('mit');
+      dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
 
-    const files = [
-      ['package.json', JSON.stringify(packageJson(exampleName), null, 2)],
-      ['tsconfig.json', JSON.stringify(tsConfig(), null, 2)],
-      ['.prettierrc', JSON.stringify(prettierConfig, null, 2)],
-      ['.eslintrc', JSON.stringify(eslintConfig, null, 2)],
-      ['postcss.config.js', postcssConfig],
-      ['tailwind.config.js', tailwindConfig],
-      ['.env.example', envExample],
-      ['.gitignore', gitignore],
-      ['LICENSE.md', license],
-      ['pages/_app.tsx', generateAppPage()],
-      ['pages/index.tsx', generateIndexPage(exampleName)],
-      ['styles/globals.css', globalStyles],
-    ];
+      const gitignore = await fetchGitignore('Node.gitignore');
+      const license = await fetchLicense('mit');
 
-    files.forEach(([filename, content]) => {
-      fs.writeFileSync(path.join(exampleDir, filename), content);
-    });
+      const files = [
+        ['package.json', JSON.stringify(packageJson(exampleName), null, 2)],
+        ['tsconfig.json', JSON.stringify(tsConfig(), null, 2)],
+        ['.prettierrc', JSON.stringify(prettierConfig, null, 2)],
+        ['.eslintrc', JSON.stringify(eslintConfig, null, 2)],
+        ['postcss.config.js', postcssConfig],
+        ['tailwind.config.js', tailwindConfig],
+        ['.env.example', envExample],
+        ['.gitignore', gitignore],
+        ['LICENSE.md', license],
+        ['pages/_app.tsx', generateAppPage()],
+        ['pages/index.tsx', generateIndexPage(exampleName)],
+        ['styles/globals.css', globalStyles],
+      ];
 
-    const huskyPreCommit = `#!/bin/sh
+      files.forEach(([filename, content]) => {
+        fs.writeFileSync(path.join(exampleDir, filename), content);
+      });
+
+      const huskyPreCommit = `#!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
 yarn lint-staged
 `;
-    fs.writeFileSync(path.join(exampleDir, '.husky/pre-commit'), huskyPreCommit, { mode: 0o755 });
+      fs.writeFileSync(path.join(exampleDir, '.husky/pre-commit'), huskyPreCommit, { mode: 0o755 });
+    } else {
+      console.log('Template downloaded successfully!');
+    }
 
     console.log('Installing dependencies...');
-    execSync('yarn');
+    execSync('yarn', { cwd: exampleDir });
+
+    const workspacePackages = getWorkspacePackages();
 
     console.log(`\n✨ Example ${exampleName} created successfully!\n`);
     console.log('Detected workspace packages:');

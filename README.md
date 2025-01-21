@@ -1,5 +1,12 @@
 # Next.js Portfolio Builder
 
+![Yarn Badge](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=fff&style=flat-square)
+![TypeScript Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=flat-square)
+![Next.js Badge](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=flat-square)
+![Tailwind CSS Badge](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=fff&style=flat-square)
+![ESLint Badge](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=flat-square)
+![Prettier Badge](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=fff&style=flat-square)
+
 `nextjs-portfolio-builder` is a powerful and flexible monorepo template designed to streamline the creation and management of your web design portfolio. It leverages the latest web technologies, including **Next.js**, **Yarn Workspaces**, **TypeScript**, and **Tailwind CSS**, to provide a robust and scalable development environment.
 
 ## Overview

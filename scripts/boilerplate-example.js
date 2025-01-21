@@ -178,60 +178,61 @@ async function createExample() {
     const exampleName = await question('Enter the name of the new example (without "example-"): ');
     const exampleDir = path.join(__dirname, '..', 'examples', exampleName);
 
+    if (fs.existsSync(exampleDir)) throw new Error(`Example ${exampleName} already exists.`);
+
+    const templateName = await question('If you would like to use a template, enter it\'s name: ');
+
     console.log('\nSetting up project...');
 
-    if (fs.existsSync(exampleDir)) {
-      console.error(`Error: Example ${exampleName} already exists.`);
-      process.exit(1);
-    }
+    if (templateName) {
+      console.log(`Downloading "${templateName}" template...`);
+      const templateExists = await downloadTemplate('example', templateName, exampleDir);
 
-    console.log('Checking for template...');
-    const templateExists = await downloadTemplate('example', exampleName, exampleDir);
+      if (!templateExists) {
+        const cont = await question('Template not found. Create a default example? (y/n): ');
+        if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
 
-    if (!templateExists) {
-      const cont = await question('Template not found. Create a default example? (y/n): ');
-      if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
+        const dirs = [
+          exampleDir,
+          path.join(exampleDir, 'pages'),
+          path.join(exampleDir, 'styles'),
+          path.join(exampleDir, 'components'),
+          path.join(exampleDir, '.husky'),
+        ];
 
-      const dirs = [
-        exampleDir,
-        path.join(exampleDir, 'pages'),
-        path.join(exampleDir, 'styles'),
-        path.join(exampleDir, 'components'),
-        path.join(exampleDir, '.husky'),
-      ];
+        dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
 
-      dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+        const gitignore = await fetchGitignore('Node.gitignore');
+        const license = await fetchLicense('mit');
 
-      const gitignore = await fetchGitignore('Node.gitignore');
-      const license = await fetchLicense('mit');
+        const files = [
+          ['package.json', JSON.stringify(packageJson(exampleName), null, 2)],
+          ['tsconfig.json', JSON.stringify(tsConfig(), null, 2)],
+          ['.prettierrc', JSON.stringify(prettierConfig, null, 2)],
+          ['.eslintrc', JSON.stringify(eslintConfig, null, 2)],
+          ['postcss.config.js', postcssConfig],
+          ['tailwind.config.js', tailwindConfig],
+          ['.env.example', envExample],
+          ['.gitignore', gitignore],
+          ['LICENSE.md', license],
+          ['pages/_app.tsx', generateAppPage()],
+          ['pages/index.tsx', generateIndexPage(exampleName)],
+          ['styles/globals.css', globalStyles],
+        ];
 
-      const files = [
-        ['package.json', JSON.stringify(packageJson(exampleName), null, 2)],
-        ['tsconfig.json', JSON.stringify(tsConfig(), null, 2)],
-        ['.prettierrc', JSON.stringify(prettierConfig, null, 2)],
-        ['.eslintrc', JSON.stringify(eslintConfig, null, 2)],
-        ['postcss.config.js', postcssConfig],
-        ['tailwind.config.js', tailwindConfig],
-        ['.env.example', envExample],
-        ['.gitignore', gitignore],
-        ['LICENSE.md', license],
-        ['pages/_app.tsx', generateAppPage()],
-        ['pages/index.tsx', generateIndexPage(exampleName)],
-        ['styles/globals.css', globalStyles],
-      ];
+        files.forEach(([filename, content]) => {
+          fs.writeFileSync(path.join(exampleDir, filename), content);
+        });
 
-      files.forEach(([filename, content]) => {
-        fs.writeFileSync(path.join(exampleDir, filename), content);
-      });
-
-      const huskyPreCommit = `#!/bin/sh
+        const huskyPreCommit = `#!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
 yarn lint-staged
 `;
-      fs.writeFileSync(path.join(exampleDir, '.husky/pre-commit'), huskyPreCommit, { mode: 0o755 });
-    } else {
-      console.log('Template downloaded successfully!');
+        fs.writeFileSync(path.join(exampleDir, '.husky/pre-commit'), huskyPreCommit, { mode: 0o755 });
+      } else {
+        console.log('Template downloaded successfully!');
+      }
     }
 
     console.log('Installing dependencies...');
@@ -244,7 +245,8 @@ yarn lint-staged
     Object.keys(workspacePackages).forEach((pkg) => console.log(`- ${pkg}`));
     console.log(`\nRun the example: "yarn dev example-${exampleName}"\n`);
   } catch (error) {
-    console.error('Error creating example:', error);
+    console.error('\nError creating example:', error);
+    console.log('');
     process.exit(1);
   } finally {
     rl.close();

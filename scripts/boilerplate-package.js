@@ -167,10 +167,7 @@ async function createPackage() {
 
     const packageDir = path.join(__dirname, '..', 'packages', packageName);
 
-    if (fs.existsSync(packageDir)) {
-      console.error(`Error: Package ${packageName} already exists.`);
-      process.exit(1);
-    }
+    if (fs.existsSync(packageDir)) throw new Error(`Package ${packageName} already exists.`);
 
     const dirs = [
       packageDir,
@@ -210,7 +207,8 @@ async function createPackage() {
     console.log('To use in an example:');
     console.log(`import { Button } from '@portfolio/${packageName}';\n`);
   } catch (error) {
-    console.error('Error creating package:', error);
+    console.error('\nError creating package:', error);
+    console.log('');
     process.exit(1);
   } finally {
     rl.close();

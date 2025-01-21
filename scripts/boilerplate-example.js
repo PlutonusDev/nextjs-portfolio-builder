@@ -160,8 +160,17 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
 `;
 
-const generateIndexPage = (exampleName, packages) => {
-  return `
+const generateAppPage = () => {
+  return `\
+  import '../styles/globals.css';
+
+  export default ({ Component, pageProps }: AppProps) => {
+  return <Component {...pageProps} />;
+}`;
+}
+
+const generateIndexPage = (exampleName) => {
+  return `\
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -179,7 +188,7 @@ const globalStyles = `@tailwind base;
 @tailwind components;
 @tailwind utilities;`;
 
-const tsConfig = (workspacePackages) => {
+const tsConfig = () => {
   const paths = {
     '@/*': ['./*'],
     '@portfolio/*': ['../../packages/*'],
@@ -225,7 +234,7 @@ async function createExample() {
 
     const files = [
       ['package.json', JSON.stringify(packageJson(exampleName), null, 2)],
-      ['tsconfig.json', JSON.stringify(tsConfig(workspacePackages), null, 2)],
+      ['tsconfig.json', JSON.stringify(tsConfig(), null, 2)],
       ['.prettierrc', JSON.stringify(prettierConfig, null, 2)],
       ['.eslintrc', JSON.stringify(eslintConfig, null, 2)],
       ['postcss.config.js', postcssConfig],
@@ -233,7 +242,8 @@ async function createExample() {
       ['.env.example', envExample],
       ['.gitignore', gitignore],
       ['LICENSE.md', license],
-      ['pages/index.tsx', generateIndexPage(exampleName, workspacePackages)],
+      ['pages/_app.tsx', generateAppPage()],
+      ['pages/index.tsx', generateIndexPage(exampleName)],
       ['styles/globals.css', globalStyles],
     ];
 

@@ -68,21 +68,20 @@ const packageJson = (packageName) => ({
     'react-dom': '>=19.0.0',
   },
   devDependencies: {
-    '@testing-library/jest-dom': '^5.14.1',
-    '@testing-library/react': '^14.0.0',
+    '@testing-library/jest-dom': '^6.6.3',
+    '@testing-library/react': '^16.2.0',
     '@types/jest': '^29.5.14',
     '@types/react': '^19.0.7',
     '@types/react-dom': '^19.0.3',
-    '@types/testing-library__jest-dom': '^5.14.5',
-    '@typescript-eslint/eslint-plugin': '^6.2.0',
-    '@typescript-eslint/parser': '^6.2.0',
+    '@typescript-eslint/eslint-plugin': '^8.21.0',
+    '@typescript-eslint/parser': '^8.21.0',
     eslint: '^9.18.0',
-    'eslint-config-prettier': '^8.8.0',
-    'eslint-plugin-react': '^7.32.2',
-    'eslint-plugin-react-hooks': '^4.6.0',
+    'eslint-config-prettier': '^10.0.1',
+    'eslint-plugin-react': '^7.37.4',
+    'eslint-plugin-react-hooks': '^5.1.0',
     jest: '^29.7.0',
-    'jest-environment-jsdom': '^29.3.1',
-    prettier: '^2.8.8',
+    'jest-environment-jsdom': '^29.7.0',
+    prettier: '^3.4.2',
     react: '^19.0.0',
     typescript: '^5.7.3',
   },
@@ -112,12 +111,12 @@ const tsConfig = {
 const eslintRc = `module.exports = {
   extends: ["../../.eslintrc.js"],
   parserOptions: {
-    project: ["../../tsconfig.json", "./tsconfig.json"], 
+    project: ["../../tsconfig.json", "./tsconfig.json"],
   },
 };
 `;
 
-const indexFile = `export { default as Example } from './components/Example';
+const indexFile = `export { default as Button } from './components/Button';
 `;
 
 const exampleComponent = `import React from 'react';
@@ -127,33 +126,33 @@ export interface ExampleProps {
   className?: string;
 }
 
-const Example = React.forwardRef<HTMLDivElement, ExampleProps>(
+const Button = React.forwardRef<HTMLDivElement, ExampleProps>(
   ({ children, className = '', ...props }, ref) => {
     return (
-      <div ref={ref} className={className} {...props}>
+      <button className={className ? className : "px-2 py-1 rounded bg-blue-500 text-zinc-900 hover:bg-blue-300 transition-colors duration-200"}>
         {children}
-      </div>
+      </button>
     );
   }
 );
 
-Example.displayName = 'Example';
+Button.displayName = 'ExampleButton';
 
-export default Example;
+export default Button;
 `;
 
 const exampleTest = `import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Example from '../Example';
+import Button from '../Button';
 
-describe('Example', () => {
+describe('Button', () => {
   it('renders children correctly', () => {
-    render(<Example>Test Content</Example>);
-    expect(screen.getByText('Test Content')).toBeInTheDocument();
+    render(<Button>Hello World</Button>);
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
-    const { container } = render(<Example className="custom-class" />);
+    const { container } = render(<Button className="custom-class" />);
     expect(container.firstChild).toHaveClass('custom-class');
   });
 });
@@ -191,8 +190,8 @@ async function createPackage() {
       ['.gitignore', gitignore],
       ['LICENSE.md', license],
       ['src/index.ts', indexFile],
-      ['src/components/Example.tsx', exampleComponent],
-      ['src/components/__tests__/Example.test.tsx', exampleTest],
+      ['src/components/Button.tsx', exampleComponent],
+      ['src/components/__tests__/Button.test.tsx', exampleTest],
     ];
 
     files.forEach(([filename, content]) => {
@@ -208,7 +207,7 @@ async function createPackage() {
     console.log('2. Run one of the examples: "yarn dev example-name"');
     console.log('The package will be built ✨ automatically ✨ if any files have changed.\n');
     console.log('To use in an example:');
-    console.log(`import { Example } from '@portfolio/${packageName}';\n`);
+    console.log(`import { Button } from '@portfolio/${packageName}';\n`);
   } catch (error) {
     console.error('Error creating package:', error);
     process.exit(1);

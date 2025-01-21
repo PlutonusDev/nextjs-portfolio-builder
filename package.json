@@ -1,0 +1,28 @@
+{
+  "name": "plutonus-portfolio-examples",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "examples/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn build:packages && node ./scripts/run-example dev",
+    "start": "node ./scripts/run-example start",
+    "build": "yarn build:packages && node ./scripts/run-example build",
+    "build:packages": "node ./scripts/build-packages",
+    "lint": "yarn workspaces foreach -A run lint",
+    "list": "node ./scripts/list-workspaces",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "rm -rf node_modules .turbo && rm -rf packages/*/dist && rm -rf examples/*/dist && rm -rf examples/*/.next && rm -rf .buildcache",
+    "create:example": "node ./scripts/boilerplate-example",
+    "create:package": "node ./scripts/boilerplate-package"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.1",
+    "prettier": "^3.4.2",
+    "yarn": "berry"
+  }
+}

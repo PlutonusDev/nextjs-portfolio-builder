@@ -1,7 +1,3 @@
 {
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
-  },
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs"
+  "typescript.tsserver.useSyntaxServer": "always"
 }

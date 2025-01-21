@@ -1,4 +1,4 @@
-# Next.js Portfolio Builder
+![Frame 1](https://github.com/user-attachments/assets/321262e3-7246-4572-8f6b-ec81c32087d2)
 
 ![Node.js Badge](https://img.shields.io/badge/Node.js-5FA04E?logo=nodedotjs&logoColor=fff&style=flat-square)
 ![Yarn Badge](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=fff&style=flat-square)

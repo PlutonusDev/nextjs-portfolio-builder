@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { promisify } = require('util');
 const readline = require('readline');
-const { downloadTemplate, fetchGitignore, fetchLicense } = require("./git-utils");
+const { downloadTemplate, fetchGitignore, fetchLicense } = require('./git-utils');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -135,7 +135,7 @@ import '../styles/globals.css';
 export default ({ Component, pageProps }: AppProps) => {
   return <Component {...pageProps} />;
 }`;
-}
+};
 
 const generateIndexPage = (exampleName) => {
   return `\
@@ -180,7 +180,7 @@ async function createExample() {
 
     if (fs.existsSync(exampleDir)) throw new Error(`Example ${exampleName} already exists.`);
 
-    const templateName = await question('If you would like to use a template, enter it\'s name: ');
+    const templateName = await question("If you would like to use a template, enter it's name: ");
 
     console.log('\nSetting up project...');
 
@@ -191,7 +191,7 @@ async function createExample() {
 
       if (!templateExists) {
         const cont = await question('Template not found. Create a default example? (y/n): ');
-        if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
+        if (!['y', 'yes', 'ye'].includes(cont.toLowerCase())) throw new Error('Cancelled.');
       }
     }
 

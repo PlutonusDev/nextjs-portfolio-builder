@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { promisify } = require('util');
 const readline = require('readline');
-const { downloadTemplate, fetchGitignore, fetchLicense } = require("./git-utils");
+const { downloadTemplate, fetchGitignore, fetchLicense } = require('./git-utils');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -133,7 +133,7 @@ async function createPackage() {
 
     if (fs.existsSync(packageDir)) throw new Error(`Package ${packageName} already exists.`);
 
-    const templateName = await question('If you would like to use a template, enter it\'s name: ');
+    const templateName = await question("If you would like to use a template, enter it's name: ");
 
     console.log('\nSetting up project...');
 
@@ -144,7 +144,7 @@ async function createPackage() {
 
       if (!templateExists) {
         const cont = await question('Template not found. Create a default package? (y/n): ');
-        if (!["y", "yes", "ye"].includes(cont.toLowerCase())) throw new Error("Cancelled.");
+        if (!['y', 'yes', 'ye'].includes(cont.toLowerCase())) throw new Error('Cancelled.');
       }
     }
 

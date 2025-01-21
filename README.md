@@ -31,7 +31,7 @@ This project provides a well-organized structure for showcasing multiple web des
 1. **Clone the Repository:**
 
    ```bash
-   git clone [https://github.com/PlutonusDev/nextjs-portfolio-builder](https://github.com/PlutonusDev/nextjs-portfolio-builder) my-portfolio
+   git clone https://github.com/PlutonusDev/nextjs-portfolio-builder my-portfolio
    cd my-portfolio
    ```
 

@@ -129,9 +129,10 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api
 
 const generateAppPage = () => {
   return `\
-  import '../styles/globals.css';
+import { type AppProps } from 'next/app';
+import '../styles/globals.css';
 
-  export default ({ Component, pageProps }: AppProps) => {
+export default ({ Component, pageProps }: AppProps) => {
   return <Component {...pageProps} />;
 }`;
 }

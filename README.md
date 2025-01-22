@@ -144,3 +144,7 @@ This project is licensed under the GPL-3.0 License. The `create:example` and `cr
 ## Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
+
+## Attributions
+
+1. Finger snap icon in banner created by Culmbio - Flaticon

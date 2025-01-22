@@ -28,8 +28,7 @@ This project provides a well-organized structure for showcasing multiple web des
 
 ## Requirements
 
-> [!IMPORTANT]
-> **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
+> [!IMPORTANT] > **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
 >
 > ```bash
 > npm install -g yarn@berry
@@ -58,6 +57,9 @@ This project provides a well-organized structure for showcasing multiple web des
 
    Follow the prompts to create a new UI package (e.g., name it `ui` or something specific to your design). This package will hold your reusable React components.
 
+   > [!TIP]
+   > You can run `yarn list:templates packages` to get a list of available package templates.
+
 4. **Create a Next.js Example:**
 
    ```bash
@@ -65,6 +67,9 @@ This project provides a well-organized structure for showcasing multiple web des
    ```
 
    Follow the prompts to create a new Next.js example project (e.g., name it `commerce`, `blog`, or `portfolio`).
+
+   > [!TIP]
+   > You can run `yarn list:templates examples` to get a list of available example templates.
 
 ## Project Structure
 
@@ -91,10 +96,10 @@ nextjs-portfolio-builder/
 To start the development server for a specific example:
 
 ```bash
-yarn dev <example-name>
+yarn dev example-name
 ```
 
-> (Replace `<example-name>` with the actual name of your example directory, for example: `yarn dev example-commerce`). Any edited packages will automatically be built.
+> (Replace `example-name` with the actual name of your example directory, for example: `yarn dev example-commerce`). Any edited packages will automatically be built.
 
 ### Building
 
@@ -120,8 +125,9 @@ yarn dev <example-name>
 
 ### Other Commands
 
-- **`yarn list`:** List all workspaces in the project. (Uses a custom script to override the default `yarn list`)
-- **`yarn clean`:** Removes temporary build files, node_modules, and caches
+- **`yarn list:workspaces`:** List all workspaces in the project.
+- **`yarn list:templates [examples/packages]`**: List available templates.
+- **`yarn clean`:** Removes temporary build files, node_modules, and caches.
 
 ## Adding New Packages
 
@@ -138,3 +144,7 @@ This project is licensed under the GPL-3.0 License. The `create:example` and `cr
 ## Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
+
+## Attributions
+
+1. Finger snap icon in banner created by Culmbio - Flaticon

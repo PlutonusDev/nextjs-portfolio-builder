@@ -176,6 +176,14 @@ async function createPackage() {
         fs.writeFileSync(path.join(packageDir, filename), content);
       });
     } else {
+      const packageJsonPath = path.join(exampleDir, 'package.json');
+      try {
+        const packageJsonContent = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        packageJsonContent.name = `package-${exampleName}`;
+        fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonContent, null, 2));
+      } catch (error) {
+        console.warn(`Could not update package.json name: ${error.message}`);
+      }
       console.log('Template downloaded successfully!');
     }
 

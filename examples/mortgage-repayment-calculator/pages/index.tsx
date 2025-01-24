@@ -47,10 +47,10 @@ export default function Home() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen w-full bg-slate-100">
-      <div className="max-w-5xl rounded-2xl overflow-hidden bg-white shadow-xl flex">
-        <form onSubmit={handleSubmit(processMortgageRepayments)} className="p-8 w-1/2">
-          <div className="flex items-center justify-between">
+    <div className="md:flex md:justify-center md:items-center h-screen w-full bg-slate-100">
+      <div className="w-full md:max-w-5xl md:rounded-2xl overflow-hidden bg-white shadow-xl md:flex">
+        <form onSubmit={handleSubmit(processMortgageRepayments)} className="p-8 md:w-1/2">
+          <div className="flex-wrap items-center md:justify-between">
             <p className="text-slate-900 font-bold text-xl">Mortgage Calculator</p>
             <a onClick={() => { reset(); setMortgageType(""); setRepayments(null); }} className="cursor-pointer text-slate-500 text-sm font-semibold underline hover:text-slate-300">Clear All</a>
           </div>
@@ -112,7 +112,7 @@ export default function Home() {
             </button>
           </div>
         </form>
-        <div className="w-1/2 bg-slate-900 rounded-bl-[64px]">
+        <div className="md:w-1/2 bg-slate-900 md:rounded-bl-[64px]">
           {repayments ? (
             <div className="p-8">
               <p className="text-slate-100 font-bold text-xl">Your results</p>

@@ -235,6 +235,14 @@ yarn lint-staged
 `;
       fs.writeFileSync(path.join(exampleDir, '.husky/pre-commit'), huskyPreCommit, { mode: 0o755 });
     } else {
+      const packageJsonPath = path.join(exampleDir, 'package.json');
+      try {
+        const packageJsonContent = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        packageJsonContent.name = `example-${exampleName}`;
+        fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonContent, null, 2));
+      } catch (error) {
+        console.warn(`Could not update package.json name: ${error.message}`);
+      }
       console.log('Template downloaded successfully!');
     }
 

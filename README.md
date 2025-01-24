@@ -1,4 +1,4 @@
-# Next.js Portfolio Builder
+![Frame 1](https://github.com/user-attachments/assets/321262e3-7246-4572-8f6b-ec81c32087d2)
 
 ![Node.js Badge](https://img.shields.io/badge/Node.js-5FA04E?logo=nodedotjs&logoColor=fff&style=flat-square)
 ![Yarn Badge](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=fff&style=flat-square)
@@ -28,7 +28,8 @@ This project provides a well-organized structure for showcasing multiple web des
 
 ## Requirements
 
-> [!IMPORTANT] > **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
+> [!IMPORTANT]
+> **Yarn (Berry):** This project uses Yarn as its package manager. It is recommended you use Yarn Berry (Yarn 2 or later). If you don't have it installed, run:
 >
 > ```bash
 > npm install -g yarn@berry
@@ -57,8 +58,8 @@ This project provides a well-organized structure for showcasing multiple web des
 
    Follow the prompts to create a new UI package (e.g., name it `ui` or something specific to your design). This package will hold your reusable React components.
 
-   > [!TIP]
-   > You can run `yarn list:templates packages` to get a list of available package templates.
+> [!TIP]
+> You can run `yarn list:templates packages` to get a list of available package templates.
 
 4. **Create a Next.js Example:**
 
@@ -68,8 +69,8 @@ This project provides a well-organized structure for showcasing multiple web des
 
    Follow the prompts to create a new Next.js example project (e.g., name it `commerce`, `blog`, or `portfolio`).
 
-   > [!TIP]
-   > You can run `yarn list:templates examples` to get a list of available example templates.
+> [!TIP]
+> You can run `yarn list:templates examples` to get a list of available example templates.
 
 ## Project Structure
 
